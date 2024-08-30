@@ -36,3 +36,19 @@ Platinum clients average 9 transactions and spend $2,889.
 ![Image 4](views/Category_Transaction.png)
 
 ![Image 5](views/Spent_Cat.png)
+
+
+# Statistical Analysis
+
+We want to determine if the mean amount spent on standard rooms and suites is the same. To address this, we formulate the following hypotheses:
+
+- **Null Hypothesis (H₀):** \( \mu_1 = \mu_2 \)
+- **Alternative Hypothesis (H₁):** \( \mu_1 \neq \mu_2 \)
+
+Here, the null hypothesis states that the mean transaction amounts for standard rooms and suites are statistically equivalent.
+
+To use the t-test, we must assume that the data for each group is normally distributed. To test this assumption, we will use the Kolmogorov-Smirnov test. We cannot use the Shapiro-Wilk test because it is limited to datasets with up to 5000 observations, whereas our Specialty Suite dataset exceeds this limit.
+
+The results indicate that the null hypothesis is rejected for Standard and Suite products. This implies there is sufficient statistical evidence to conclude that the amounts spent on Standard and Suite products do not follow a normal distribution. Consequently, we must use a non-parametric method for hypothesis testing.
+
+We applied the Mann-Whitney U test and obtained a p-value of \( < 2.2 \times 10^{-16} \). Therefore, we reject the null hypothesis and conclude that the mean amount spent on standard rooms and suites is significantly different.
