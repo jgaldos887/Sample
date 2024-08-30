@@ -17,7 +17,11 @@ The transaction amount followed a normal distribution, which deviates from our e
 
 When plotting the data by date, we observe that prices appear to follow a consistent trend throughout the period, which is unexpected. Typically, rates should increase annually, unless influenced by a recession, in which case they might decline. A flat rate over time suggests potential issues with rate optimization. If the data is accurate, it implies that rates should be adjusted at least in line with yearly inflation; otherwise, we risk selling at below-market prices.
 
+![Image 2](views/Amount_time.png)
+
 Boxplots of the amount spent by product category reveal discrepancies in rates by room type. Generally, suite prices are higher than those of specialty suites, while standard, premier, and specialty suites are quite similar. This may be influenced by the different customer segments. To investigate this further, we need to compare the graphs for each main segment. However, the presidential suite aligns with expected pricing behavior.
+
+![Image 3](views/Amount_category.png)
 
 Customers are categorized into tiers: Bronze, Silver, Gold, and Platinum, based on their total amount spent or number of transactions.
 
@@ -28,3 +32,23 @@ Silver clients average 2.7 transactions and spend $988. The transaction distribu
 Gold clients average 6.4 transactions and spend $2,314. Like Silver clients, the distribution of transactions is uneven.
 
 Platinum clients average 9 transactions and spend $2,889.
+
+![Image 4](views/Category_Transaction.png)
+
+![Image 5](views/Spent_Cat.png)
+
+
+# Statistical Analysis
+
+We want to determine if the mean amount spent on standard rooms and suites is the same. To address this, we formulate the following hypotheses:
+
+- **Null Hypothesis (H₀):**  \mu_1 = \mu_2 \)
+- **Alternative Hypothesis (H₁):** \( \mu_1 \neq \mu_2 \)
+
+Here, the null hypothesis states that the mean transaction amounts for standard rooms and suites are statistically equivalent.
+
+To use the t-test, we must assume that the data for each group is normally distributed. To test this assumption, we will use the Kolmogorov-Smirnov test. We cannot use the Shapiro-Wilk test because it is limited to datasets with up to 5000 observations, whereas our Specialty Suite dataset exceeds this limit.
+
+The results indicate that the null hypothesis is rejected for Standard and Suite products. This implies there is sufficient statistical evidence to conclude that the amounts spent on Standard and Suite products do not follow a normal distribution. Consequently, we must use a non-parametric method for hypothesis testing.
+
+We applied the Mann-Whitney U test and obtained a p-value of \( < 2.2 \times 10^{-16} \). Therefore, we reject the null hypothesis and conclude that the mean amount spent on standard rooms and suites is significantly different.
