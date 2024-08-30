@@ -42,8 +42,8 @@ Platinum clients average 9 transactions and spend $2,889.
 
 We want to determine if the mean amount spent on standard rooms and suites is the same. To address this, we formulate the following hypotheses:
 
-- **Null Hypothesis (H₀):**  \mu_1 = \mu_2 \)
-- **Alternative Hypothesis (H₁):** \( \mu_1 \neq \mu_2 \)
+- **Null Hypothesis (H₀):** $ \mu_1 = \mu_2 \)$
+- **Alternative Hypothesis (H₁):** $\( \mu_1 \neq \mu_2 \)$
 
 Here, the null hypothesis states that the mean transaction amounts for standard rooms and suites are statistically equivalent.
 
