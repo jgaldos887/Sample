@@ -389,14 +389,14 @@ train$HighValue <- factor(train$HighValue, levels = c("0", "1"), labels = c("No"
 #NOTE: Normally, we would need to standarize/normalize the variables. However, since we use the package Caret, we don't need to.
 
 #Sava data as csv
-write.csv(db,file="predictive_models_data.csv")
-write.csv(test,file="test.csv")
-write.csv(train,file="train.csv")
+write.csv(db,file="../stores/predictive_models_data.csv")
+write.csv(test,file="../stores/test.csv")
+write.csv(train,file="../stores/train.csv")
 
 # TRAIN CONTROL -----------------------------------------------------------
-db<- read.csv("predictive_models_data.csv")
-test<-read.csv("test.csv")
-train<-read.csv("train.csv")
+db<- read.csv("../stores/predictive_models_data.csv")
+test<-read.csv("../stores/test.csv")
+train<-read.csv("../stores/train.csv")
 
 ctrl<- trainControl(method = "cv", #cross validation
                     number = 10, #we will split data in 10
@@ -537,9 +537,9 @@ class_forest <- train(
   method = "ranger",
   trControl = ctrl3,
   tuneGrid=expand.grid(
-    mtry = c(1,2,3,4,5,6,7,8), #cualquier subconjunto es bagging
-    splitrule = "gini", #parta el arbol a traves de gini
-    min.node.size = c(15,30,45,60)) #controlamos la profundidad del arbol por el numero de obs minimo
+    mtry = c(1,2,3,4,5,6,7,8), 
+    splitrule = "gini", 
+    min.node.size = c(15,30,45,60))
 )
 
 class_forest
@@ -555,46 +555,3 @@ predictTest_forest <- data.frame(
 # Accuracy
 mean(predictTest_forest$obs==predictTest_forest$pred)
 #The accuracy is also 87%
-
-# TREE --------------------------------------------------------------------
-
-ctrl2<- trainControl(method = "cv",
-                    number = 10,
-                    classProbs = TRUE,
-                    verbose=FALSE,
-                    savePredictions = T)
-
-
-set.seed(1234)
-
-train$HighValue <- factor(train$HighValue, levels = c("No", "Yes"), labels = c("0", "1"))
-train$ProductCategory <- as.factor(train$ProductCategory)
-train$final_category <- as.factor(train$final_category)
-
-train <- subset(train, select = -c(X, X.1, X.2))
-
-class_tree <- train(HighValue~Amount+ProductCategory+final_category+Yr,
-                       data = train, 
-                       method = "rpart", #trees
-                       trControl = ctrl2,
-                       tuneLength=100) #100 alphas
-
-
-class_arboles
-#aqui conseguimos cual es el mejor cost complexitu prunning (cp)
-
-predictTest_arbol <- data.frame(
-  obs = test$Default,                                    ## observed class labels
-  predict(class_arboles, newdata = test, type = "prob"),         ## predicted class probabilities
-  pred = predict(class_arboles, newdata = test, type = "raw")    ## predicted class labels
-)
-
-head(predictTest_arbol)
-
-
-# Accuracy
-mean(predictTest_arbol$obs==predictTest_arbol$pred)
-
-p_load("rpart.plot")
-prp(class_arboles$finalModel, under = TRUE, branch.lty = 2, yesno = 2, faclen = 0, varlen=15,tweak=1.2,clip.facs= TRUE,box.palette = "Greens",compress=FALSE,ycompress = FALSE)
-
