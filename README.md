@@ -42,8 +42,8 @@ Platinum clients average 9 transactions and spend $2,889.
 
 We want to determine if the mean amount spent on standard rooms and suites is the same. To address this, we formulate the following hypotheses:
 
-- **Null Hypothesis (H₀):**  \mu_1 = \mu_2 \)
-- **Alternative Hypothesis (H₁):** \( \mu_1 \neq \mu_2 \)
+- **Null Hypothesis (H₀):** $\( \mu_1 = \mu_2 \)$
+- **Alternative Hypothesis (H₁):** $\( \mu_1 \neq \mu_2 \)$
 
 Here, the null hypothesis states that the mean transaction amounts for standard rooms and suites are statistically equivalent.
 
@@ -52,3 +52,20 @@ To use the t-test, we must assume that the data for each group is normally distr
 The results indicate that the null hypothesis is rejected for Standard and Suite products. This implies there is sufficient statistical evidence to conclude that the amounts spent on Standard and Suite products do not follow a normal distribution. Consequently, we must use a non-parametric method for hypothesis testing.
 
 We applied the Mann-Whitney U test and obtained a p-value of \( < 2.2 \times 10^{-16} \). Therefore, we reject the null hypothesis and conclude that the mean amount spent on standard rooms and suites is significantly different.
+
+
+# Predictive Modeling
+
+We split our data into training (70%) and test (30%) datasets and employed two classification models: Logistic Regression (Logit) and Random Forest.
+
+For the Logistic Regression model, we applied 10-fold cross-validation and used accuracy as the performance metric. Elastic Net regularization was utilized, and initially, we did not tune the hyperparameters (alpha and lambda).
+
+To evaluate the model’s performance, we used a confusion matrix. The initial results showed an accuracy of 87%, with 100% sensitivity and 27% specificity. This indicates that while there were no false positives (i.e., non-high-value customers were not misclassified as high-value), the model had a high rate of false negatives (i.e., high-value customers were not correctly identified).
+
+To improve performance, we refined the Logistic Regression model by tuning the hyperparameters and adjusting the classification threshold, which by default is 0.5. We selected a threshold of 0.18, resulting in an accuracy of 78%, with 84% sensitivity and 50% specificity. This adjustment led to 16% of non-high-value customers being misclassified as high-value, but improved the correct classification of high-value customers to 50%. If the goal is to minimize misclassification of non-high-value customers, the initial model is preferable. Conversely, if the aim is to better identify high-value customers even at the risk of misclassifying others, the refined model is more suitable.
+
+It is important to note that with more data on each customer, the model's performance could potentially improve, as we are currently using only three variables to determine customer classification.
+
+After developing the models, we tested them on the test dataset to ensure no overfitting. The accuracy remained consistent.
+
+Finally, we applied a Random Forest model with 5-fold cross-validation using the ranger method, achieving an accuracy of 86.9%.
