@@ -239,7 +239,7 @@ db$ProductCategory <- factor(db$ProductCategory, levels = categories) #so it wil
 ggplot(data=db, aes(x=ProductCategory, y=Amount)) +  geom_boxplot(fill='goldenrod1')
 ggsave("../views/Amount_category.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
 
-#Here we see that, even though we would expect higher categories of rooms to have a higher amount spent, this isnt neceessarily the case.
+#Here we see that, even though we would expect higher categories of rooms to have a higher amount spent, this isn't necessarily the case.
 #this could be due to many factors, such as the market segments that are booking the rooms.
 #Moreover, we know from that data that the suite that is being sold the most is the specialty suite,
 #which is at a lower point than the normal suite, could be that we are doing a better job at pricing this room, or that we are not selling
@@ -296,7 +296,7 @@ summary_customers <- db %>%
 # Check the final result
 print(summary_customers)
 
-#summary for cateogries
+#summary for categories
 category_summary <- summary_customers %>%
   group_by(final_category) %>%
   summarize(
@@ -317,6 +317,8 @@ ggplot(summary_customers, aes(x = final_category, y = NumberOfTransactions, fill
        y = "Number of Transactions") +
   scale_fill_brewer(palette = "Set3") +
   theme(legend.position = "none")
+ggsave("../views/Category_Transaction.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
+
 
 ggplot(summary_customers, aes(x = TotalAmount)) +
   geom_histogram(binwidth = 50, fill = "lightblue", color = "black") +
@@ -326,6 +328,8 @@ ggplot(summary_customers, aes(x = TotalAmount)) +
        x = "Amount Spent ($)", 
        y = "Frequency") +
   theme(strip.text = element_text(size = 12))
+ggsave("../views/Spent_Cat.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
+
 
 # Statistic Analysis ------------------------------------------------------
 
