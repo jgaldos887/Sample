@@ -85,16 +85,28 @@ skim(db) #Here we see that there are 599 missing in ProductCategory, with 5 diff
 table(db$ProductCategory) #we check and it's a categorical variable
 
 #We check in more detail
-ggplot(data= db,mapping=aes(x=Amount)) + 
-  geom_histogram() #Tiene una distribución normal
+ggplot(data = db, mapping = aes(x = Amount)) + 
+  geom_histogram(fill = "goldenrod1", color = "goldenrod3", binwidth = 10) + 
+  labs(title = "Distribution of Amount Spent by Transaction", y = "Count", x = "Amount") +
+  theme_minimal()
 
-ggplot(data=db, aes(x=reorder(ProductCategory, ProductCategory, function(x)-length(x)))) +
-  geom_bar()
+ggsave("../views/Distribution_Amount.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
+
+ggplot(data = db, aes(x = reorder(ProductCategory, ProductCategory, function(x) -length(x)))) + 
+  geom_bar(fill = "goldenrod1", color = "goldenrod3") + 
+  labs(title = "Distribution of Product Categories", y = "Count", x = "Type of Room") +
+  theme_minimal()
+
+ggsave("../views/Count_Room_Type.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
 
 categories<-c("Standard", "Premier", "Suite", "Specialty Suite", "Presidential")
 
 db$ProductCategory <- factor(db$ProductCategory, levels = categories) #so it will display in desired order
-ggplot(data=db, aes(x=ProductCategory, y=Amount)) +  geom_boxplot(fill='green')
+ggplot(data = db, aes(x = ProductCategory, y = Amount)) + 
+  geom_boxplot(fill = "goldenrod1", color = "goldenrod4") + 
+  labs(title = "Distribution of Amount Spent by Product Category", y = "Amount", x = "Product Category") +
+  theme_minimal()
+ggsave("../views/Amount_by_Product.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
 
 db$TransactionDate <- as.Date(db$TransactionDate)
 db$Month_Yr <- format(as.Date(db$TransactionDate), "%Y-%m")
@@ -130,8 +142,11 @@ Month_Yr_counts <- db[, .N, by = Month_Yr]
 skim(db$TransactionDate)
 
 ggplot(Month_Yr_counts, aes(x = Month_Yr, y = N)) +
-  geom_bar(stat = 'identity', fill = 'blue') +
-  labs(x = 'Month-Year', y = 'Count') #we check that the data makes more sense and now we see not many outliers, although still some values are very small
+  geom_bar(stat = 'identity', fill = 'goldenrod1', color = 'goldenrod3') +
+  labs(x = 'Month-Year', y = 'Count', title = 'Distribution of Counts Over Time') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  #we check that the data makes more sense and now we see not many outliers, although still some values are very small
+ggsave("../views/Count_Dates.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
 
 
 ##Missing values- Amount (602) & Product Category (599)
@@ -147,12 +162,11 @@ dup_ind<-duplicated(db[,c("CustomerID","Amount","TransactionDate")]) #this comma
 db<-db[!dup_ind,] #we remove those duplicates
 
 #Sava data as csv
-write.csv(db,file="clean_data.csv")
-
+write.csv(db,file="../stores/clean_data.csv")
 #Note: depending on the type of data, we could have also evaluated outliers, in order to decide if we should remove or keep them.
 
 # Exploratory Data Analysis (EDA) -----------------------------------------
-db<- read.csv("clean_data.csv")
+db<- read.csv("../stores/clean_data.csv")
 
 categories<-c("Standard", "Premier", "Suite", "Specialty Suite", "Presidential")
 
@@ -168,7 +182,7 @@ db$ProductCategory <- factor(db$ProductCategory)
 #Summary statistics for Amount
 sum_stats<-skim(db[,c("TransactionDate","ProductCategory","Amount")])
 stats_tbl<-as.data.frame(sum_stats)
-write.xlsx(stats_tbl, file = "stats_tbls.xlsx")
+write.xlsx(stats_tbl, file = "../document/stats_tbls.xlsx")
 
 db$ProductCategory <- factor(db$ProductCategory, levels = categories)
 two_way_table <- table(cut(db$Amount, 
@@ -176,7 +190,7 @@ two_way_table <- table(cut(db$Amount,
                            labels = c("0-100", "100-200", "200-300", "300-400", "400-500","500-600","600-700")),
                        db$ProductCategory)
 print(two_way_table)
-write.xlsx(two_way_table, file = "twoway_tbls.xlsx")
+write.xlsx(two_way_table, file = "../document/twoway_tbls.xlsx")
 
 #Distribution Amount
 
@@ -194,6 +208,8 @@ ggplot(data = db, mapping = aes(x = Amount)) +
        x = "Amount Spent",
        y = "Density") +
   theme_minimal()
+ggsave("../views/Amount2.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
+
 
 #Trends over time
 db$Month_Yr <- factor(db$Month_Yr, levels = sort(unique(db$Month_Yr)))
@@ -209,16 +225,19 @@ ggplot(data = db, mapping = aes(x = Month_Yr_graph, y = Amount)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_x_date(date_labels = "%Y-%m", date_breaks = "3 months")
+ggsave("../views/Amount_time.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
+
 
 #When we plot the data like this, we come to see that, either something happened in 2021, or otherwise, the data before 2021 is incorrect
-#since we "fixed" the dates by adding 20 to the dates, this was a strong assumtion and it could be reflecting incorrectyears
+#since we "fixed" the dates by adding 20 to the dates, this was a strong assumption and it could be reflecting incorrect years
 #the recommended thing would be to create an identifier on the dates that were corrected, and see if they all fall in this range
-#if so, then we would need to "fix" the issue in a different manner, or ultimately delete these obsevations as it coud be skewing the data
+#if so, then we would need to "fix" the issue in a different manner, or ultimately delete these observations as it could be skewing the data
 
 categories<-c("Standard", "Premier", "Suite", "Specialty Suite", "Presidential")
 
 db$ProductCategory <- factor(db$ProductCategory, levels = categories) #so it will display in desired order
-ggplot(data=db, aes(x=ProductCategory, y=Amount)) +  geom_boxplot(fill='darkred')
+ggplot(data=db, aes(x=ProductCategory, y=Amount)) +  geom_boxplot(fill='goldenrod1')
+ggsave("../views/Amount_category.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
 
 #Here we see that, even though we would expect higher categories of rooms to have a higher amount spent, this isnt neceessarily the case.
 #this could be due to many factors, such as the market segments that are booking the rooms.
