@@ -330,7 +330,6 @@ ggplot(summary_customers, aes(x = TotalAmount)) +
   theme(strip.text = element_text(size = 12))
 ggsave("../views/Spent_Cat.png", plot = last_plot(), width = 8, height = 6, dpi = 300)
 
-
 # Statistic Analysis ------------------------------------------------------
 
 #H0:μ_1=μ_2 --> the means of Standard rooms and Suites are not statistically signifcant 
