@@ -1,4 +1,4 @@
-###Data Cleaning and Preparation
+# Data Cleaning and Preparation
 
 
 To clean the data, we proceeded to do an initial exploration of the data available. This was done using simple commands to see statistical summaries. Moreover, we also did several different graphs to understand the distribution of each of the variables.
