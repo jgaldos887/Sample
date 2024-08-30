@@ -74,10 +74,10 @@ db <- db[-delete_indices, ]
 head(db)
 
 #Sava data as csv
-write.csv(db,file="transaction_data.csv")
+write.csv(db,file="../stores/transaction_data.csv")
 
 # Data Cleaning and Preparation -------------------------------------------------------------
-db<- read.csv("transaction_data.csv")
+db<- read.csv("../stores/transaction_data.csv")
 
 #Examining the data
 summary(db) #We see here that there are 602 values missing in Amount. Moreover, that the mean of Transaction Date and min look weird. Finally, that product category is character but might be categorical
