@@ -74,7 +74,7 @@ Finally, we applied a Random Forest model with 5-fold cross-validation using the
 
 The documents found in this repository are as follows:
 
-document: Contains some exported tables.
-scripts: Contains all the R scripts for the development of this project.
-stores: Contains all the data used and saved throught the code.
-views: Contains all the images generated and saved.
+- `document`: Contains some exported tables.
+- `scripts`: Contains all the R scripts for the development of this project.
+- `stores`: Contains all the data used and saved throught the code.
+- `views`: Contains all the images generated and saved.
